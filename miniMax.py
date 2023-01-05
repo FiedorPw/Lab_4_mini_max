@@ -25,6 +25,7 @@ from typing import Tuple, List
 
 from two_player_games.player import Player
 from two_player_games.games.connect_four import ConnectFour, ConnectFourMove
+import copy
 
 ROW_COUNT = 6
 COLUMN_COUNT = 7
@@ -126,7 +127,16 @@ class MinMaxSolver:
         pass
 
     def get_best_move(self) -> int:
-        pass
+        locations = self._get_valid_locations()
+        for i in range(COLUMN_COUNT):
+            if locations[i] == True:
+                im_game = copy.copy(self.game)
+                curr_player = im_game.get_current_player()
+                im_game.make_move(ConnectFourMove(i))
+                im_MinMaxSolver = MinMaxSolver(im_game)
+                print(im_game)
+                im_column_score = im_MinMaxSolver.evaluate_position(curr_player)
+                print(im_column_score)
 
     # git
     def _get_valid_locations(self) -> List[int]:
@@ -151,7 +161,6 @@ p2 = Player("b")
 game = ConnectFour(size=(COLUMN_COUNT, ROW_COUNT), first_player=p1, second_player=p2)
 minimaxsolver = MinMaxSolver(game)
 lista = [0, 1, 0, 0, 2, 3]
-print(minimaxsolver.chains_to_score(lista),"placki")
 # game.make_move(ConnectFourMove(3))
 # game.make_move(ConnectFourMove(4))
 # game.make_move(ConnectFourMove(3))
@@ -192,13 +201,13 @@ print(minimaxsolver._is_valid_move(3))
 print(minimaxsolver._get_valid_locations())
 
 print(game)
-print(game.state.fields[0][0])
+
 # minimaxsolver.positon(p1)
 #
 # minimaxsolver.find_rows(5,0,p1)
-print(minimaxsolver.evaluate_position(p1))
-print("winner to ",game.get_winner().char)
-
+# print(minimaxsolver.evaluate_position(p1))
+#print("winner to ",game.get_winner())
+minimaxsolver.get_best_move()
 
 
 
